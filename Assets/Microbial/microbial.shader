@@ -10,12 +10,19 @@
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
 		_Speedy ("Speedy", Range(0,1)) = 1.0
-	    _Pos1 ("Pos1", Color) = (0,0,0,0)
-		_Pos2("Pos2", Color) = (0,0,0,0)
-		_Pos3("Pos3", Color) = (0,0,0,0)
-		_Pos4("Pos4", Color) = (0,0,0,0)
-		_Pos5("Pos5", Color) = (0,0,0,0)
-		_Pos6("Pos6", Color) = (0,0,0,0)
+	    _Pos1 ("Pos1", Vector) = (0,0,0)
+		_Pos2("Pos2", Vector) = (0,0,0)
+		_Pos3("Pos3", Vector) = (0,0,0)
+		_Pos4("Pos4", Vector) = (0,0,0)
+		_Pos5("Pos5", Vector) = (0,0,0)
+		_Pos6("Pos6", Vector) = (0,0,0)
+
+		_Vel1("Vel1", Vector) = (0,0,0)
+		_Vel2("Vel2", Vector) = (0,0,0)
+		_Vel3("Vel3", Vector) = (0,0,0)
+		_Vel4("Vel4", Vector) = (0,0,0)
+		_Vel5("Vel5", Vector) = (0,0,0)
+		_Vel6("Vel6", Vector) = (0,0,0)
     }
     SubShader
     {
@@ -40,6 +47,21 @@
 
         half _Glossiness;
         half _Metallic;
+		float _Speedy;
+		float3 _Pos1;
+		float3 _Pos2;
+		float3 _Pos3;
+		float3 _Pos4;
+		float3 _Pos5;
+		float3 _Pos6;
+
+		float3 _Vel1;
+		float3 _Vel2;
+		float3 _Vel3;
+		float3 _Vel4;
+		float3 _Vel5;
+		float3 _Vel6;
+
         fixed4 _Color;
         #define USE_HLSL
 
@@ -564,26 +586,85 @@ float spikey(float3 p, float s) {
   return sphere(p, s-disp);
 }
 
+
 float surfaceDistance(float3 p) {
-    float d = 1.0;//sphere(p, 0.3);
+    float d = 1.0;
+
+
+	float offy = float(1) * 0.5;
+	float tm = 0.9 + _Speedy * 0.1;
+	float3 pl = _Pos1;//0.15 * float3(2.0 * sin(0.73 * _Time.y * tm + 2.0 * offy), cos(3.0 * _Time.y * tm + 1.5 * offy), 1.8 * sin(2.0 * _Time.y * tm + 5.2 * offy));
+	float nd = length(p + pl) - 0.1;
+	//float df = abs(nd-d);
+	//if (df < sd) {
+	//  sd = df; 
+	//}
+
+	d = smoothAdd(d, nd, 0.10);
+
+	offy = float(2) * 0.5;
+	tm = 0.9 + _Speedy * 0.1;
+	pl = _Pos2;// 0.15 * float3(2.0 * sin(0.73 * _Time.y * tm + 2.0 * offy), cos(3.0 * _Time.y * tm + 1.5 * offy), 1.8 * sin(2.0 * _Time.y * tm + 5.2 * offy));
+	nd = length(p + pl) - 0.1;
+	//float df = abs(nd-d);
+	//if (df < sd) {
+	//  sd = df; 
+	//}
+
+	d = smoothAdd(d, nd, 0.10);
+
+	offy = float(3) * 0.5;
+	tm = 0.9 + _Speedy * 0.1;
+	pl = _Pos3;//0.15 * float3(2.0 * sin(0.73 * _Time.y * tm + 2.0 * offy), cos(3.0 * _Time.y * tm + 1.5 * offy), 1.8 * sin(2.0 * _Time.y * tm + 5.2 * offy));
+	nd = length(p + pl) - 0.1;
+	//float df = abs(nd-d);
+	//if (df < sd) {
+	//  sd = df; 
+	//}
+
+	d = smoothAdd(d, nd, 0.10);
+
+	offy = float(4) * 0.5;
+	tm = 0.9 + _Speedy * 0.1;
+	pl = _Pos4;//0.15 * float3(2.0 * sin(0.73 * _Time.y * tm + 2.0 * offy), cos(3.0 * _Time.y * tm + 1.5 * offy), 1.8 * sin(2.0 * _Time.y * tm + 5.2 * offy));
+	nd = length(p + pl) - 0.1;
+	//float df = abs(nd-d);
+	//if (df < sd) {
+	//  sd = df; 
+	//}
+
+	d = smoothAdd(d, nd, 0.10);
+
+	offy = float(5) * 0.5;
+	tm = 0.9 + _Speedy * 0.1;
+	pl = _Pos5;//0.15 * float3(2.0 * sin(0.73 * _Time.y * tm + 2.0 * offy), cos(3.0 * _Time.y * tm + 1.5 * offy), 1.8 * sin(2.0 * _Time.y * tm + 5.2 * offy));
+	nd = length(p + pl) - 0.1;
+	//float df = abs(nd-d);
+	//if (df < sd) {
+	//  sd = df; 
+	//}
+
+	d = smoothAdd(d, nd, 0.10);
   
+	/*
     float3 sv = float3(0.0,0.0,0.0);
     float sd = 1.0;
-    int idx = 0;
+    //int idx = 0;
     for (int i=0; i<5; i++) {
         //float tf = _Time.y*0.5;
         //float it = float(i)*3.0;
         float offy = float(i)*0.5;
-  		float tm = 0.9;
+  		float tm = 0.9+_Speedy*0.1;
         float3 pl = 0.15*float3(2.0*sin(0.73*_Time.y*tm+2.0*offy), cos(3.0*_Time.y*tm+1.5*offy), 1.8*sin(2.0*_Time.y*tm+5.2*offy));
 		float nd = length(p+pl) - 0.1;
-        float df = abs(nd-d);
-        if (df < sd) {
-          sd = df; 
-        }
+        //float df = abs(nd-d);
+        //if (df < sd) {
+        //  sd = df; 
+        //}
 
     	d = smoothAdd(d,nd,0.10);
     }
+	*/
   
 	/*
      if (d < 0.1) {
@@ -634,7 +715,7 @@ float3 shade(float3 p, float3 normal) {
     #endif
 	float3 rayOrigin = IN.worldPos.xyz-sculptureCenter;
 	float3 rayDirection = getRayDirection(IN.worldPos.xyz);
-	rayOrigin -= rayDirection*2.0+0.0;
+	rayOrigin -= rayDirection*2.0;
     float t = intersect(rayOrigin, rayDirection, stepSize);
     #ifdef USE_HLSL
     if(t < 20.0) {
