@@ -32,11 +32,13 @@ public class Particles : MonoBehaviour
     void updateControls()
     {
         // Functions of time here can be replaced with input controls
-        vels[0].x += Mathf.Sin(Time.realtimeSinceStartup);
+        vels[0].x += 0.0000075f*Mathf.Sin(Time.realtimeSinceStartup);
+        vels[0].y += 0.000003f * Mathf.Sin(3.1f*Time.realtimeSinceStartup);
     }
 
     void updateSim()
     {
+        updateControls();
         for (int i = 0; i < count - 1; i++)
         {
             for (int j = i + 1; j < count; j++)
@@ -47,7 +49,7 @@ public class Particles : MonoBehaviour
                 float fc = 0.0000005f / (mag * mag * mag + 0.05f);
                 if (mag < 0.2)
                 {
-                    fc += 0.003f * (mag - 0.2f);
+                    fc += 0.001f * (mag - 0.2f);
                 }
                 vels[i] -= fc * diff;
                 vels[j] += fc * diff;
